@@ -6,6 +6,7 @@ import com.ecommerce.user.account.UserDTO;
 import com.ecommerce.user.account.UserEntity;
 import com.ecommerce.user.account.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -31,9 +32,9 @@ public class JwtUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        UserEntity user = userRepository.findByEmail(email);
+        UserEntity user = userRepository.findByEmailAndActive(email, true);
         if (user == null) {
-            throw new UsernameNotFoundException("User not found with username: " + email);
+            throw new DisabledException("No Active user with email: " + email);
         }
         List<UserAuthority> authorities = userAuthorityRepository.findByUserId(user.getId());
         return new User(user.getEmail(), user.getPassword(),
@@ -73,7 +74,8 @@ public class JwtUserDetailsService implements UserDetailsService {
 
     public void deActivateUser(String email) {
         UserEntity entity = userRepository.findByEmail(email);
-        userRepository.delete(entity);
+        entity.setActive(false);
+        userRepository.save(entity);
     }
 
     @Transactional

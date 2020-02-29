@@ -1,5 +1,7 @@
 package com.ecommerce.category;
 
+import com.ecommerce.ResponseWithStatus;
+import com.ecommerce.Status;
 import com.ecommerce.aspect.Track;
 import com.ecommerce.category.entity.ProductCategoryEntity;
 import com.ecommerce.category.entity.ProductSubCategoryEntity;
@@ -34,9 +36,11 @@ public class CategoryController {
 
     @Track
     @GetMapping
-    public List<ProductCategoryEntity> allCategories() {
+    public ResponseEntity<?> allCategories() {
         List<ProductCategoryEntity> list = categoryServiceImpl.getAllCategories();
-        return list;
+        return ResponseEntity.ok(new ResponseWithStatus(
+                new Status(true, "Request completed successfully"), list)
+        );
     }
 
 //    @GetMapping("/subcategories") // todo this API is probably not needed?
@@ -47,46 +51,63 @@ public class CategoryController {
 
     @Track
     @GetMapping("/{categoryId}")
-    public ProductCategoryEntity getOneProductCategory(@PathVariable("categoryId") long categoryId) {
-        return categoryServiceImpl.getCategoryById(categoryId);
+    public ResponseEntity getOneProductCategory(@PathVariable("categoryId") long categoryId) {
+        ProductCategoryEntity category = categoryServiceImpl.getCategoryById(categoryId);
+        return ResponseEntity.ok(new ResponseWithStatus(
+                new Status(true, "Request completed successfully"), category)
+        );
     }
 
     @Track
     @GetMapping("subcategory/{subCategoryId}")
-    public ProductSubCategoryEntity getOneProductSubCategory(@PathVariable("subCategoryId") long subCategoryId) {
-        return categoryServiceImpl.getSubCategoryById(subCategoryId);
+    public ResponseEntity getOneProductSubCategory(@PathVariable("subCategoryId") long subCategoryId) {
+        ProductSubCategoryEntity subCategory =  categoryServiceImpl.getSubCategoryById(subCategoryId);
+        return ResponseEntity.ok(new ResponseWithStatus(
+                new Status(true, "Request completed successfully"), subCategory)
+        );
     }
 
     @Track
     @PostMapping
-    public ProductCategoryEntity createCategory(
-            CategoryRequest category, @RequestParam("file") MultipartFile file) {
-        return categoryServiceImpl.createCategory(category, file);
+    public ResponseEntity createCategory(CategoryRequest category, @RequestParam("file") MultipartFile file) {
+        ProductCategoryEntity out = categoryServiceImpl.createCategory(category, file);
+        return ResponseEntity.ok(new ResponseWithStatus(
+                new Status(true, "Request completed successfully"), out)
+        );
     }
 
     @Track
     @PostMapping("/subcategory")
-    public ProductSubCategoryEntity createSubCategory(
+    public ResponseEntity<?> createSubCategory(
             SubCategoryRequest subCategoryRequest,
             @RequestParam(value = "file", required = false) MultipartFile file) {
-        return categoryServiceImpl.createSubCategory(subCategoryRequest, file);
+        ProductSubCategoryEntity out =  categoryServiceImpl.createSubCategory(subCategoryRequest, file);
+        return ResponseEntity.ok(new ResponseWithStatus(
+                new Status(true, "Request completed successfully"), out)
+        );
     }
 
     @Track
     @PostMapping("/{categoryId}")
-    public ProductCategoryEntity updateCategory(@PathVariable(value = "categoryId") long categoryId,
+    public ResponseEntity updateCategory(@PathVariable(value = "categoryId") long categoryId,
                                                 CategoryRequest categoryRequest,
                                                 @RequestParam(value = "file", required = false) MultipartFile file) {
 
-        return categoryServiceImpl.updateCategory(categoryId, categoryRequest, file);
+        ProductCategoryEntity out =  categoryServiceImpl.updateCategory(categoryId, categoryRequest, file);
+        return ResponseEntity.ok(new ResponseWithStatus(
+                new Status(true, "Request completed successfully"), out)
+        );
     }
 
     @Track
     @PostMapping("/subcategory/{subCategoryId}")
-    public ProductSubCategoryEntity editSubCategory(@PathVariable(value = "subCategoryId") long subCategoryId,
+    public ResponseEntity editSubCategory(@PathVariable(value = "subCategoryId") long subCategoryId,
                                                     SubCategoryRequest subCategoryRequest,
                                                     @RequestParam(value = "file", required = false) MultipartFile file) {
-        return categoryServiceImpl.updateSubCategory(subCategoryId, subCategoryRequest, file);
+        ProductSubCategoryEntity out =  categoryServiceImpl.updateSubCategory(subCategoryId, subCategoryRequest, file);
+        return ResponseEntity.ok(new ResponseWithStatus(
+                new Status(true, "Request completed successfully"), out)
+        );
     }
 
     @Track
@@ -105,13 +126,19 @@ public class CategoryController {
 
     @Track
     @DeleteMapping("/{categoryId}")
-    public void deleteCategory(@PathVariable(value = "categoryId") long categoryId) {
+    public ResponseEntity<?> deleteCategory(@PathVariable(value = "categoryId") long categoryId) {
         categoryServiceImpl.deleteCategory(categoryId);
+        return ResponseEntity.ok(new ResponseWithStatus(
+                new Status(true, "Request completed successfully"), null)
+        );
     }
 
     @Track
     @DeleteMapping("/subcategory/{subCategoryId}")
-    public void deleteSubCategory(@PathVariable(value = "subCategoryId") long subCategoryId) {
+    public ResponseEntity<?> deleteSubCategory(@PathVariable(value = "subCategoryId") long subCategoryId) {
         categoryServiceImpl.deleteSubCategory(subCategoryId);
+        return ResponseEntity.ok(new ResponseWithStatus(
+                new Status(true, "Request completed successfully"), null)
+        );
     }
 }

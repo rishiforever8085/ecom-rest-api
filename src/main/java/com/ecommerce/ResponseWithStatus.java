@@ -1,5 +1,8 @@
 package com.ecommerce;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class ResponseWithStatus {
     private Status status;
     private Object data;

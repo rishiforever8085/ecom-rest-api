@@ -7,7 +7,10 @@ import org.springframework.stereotype.Repository;
 
 @Repository("userRepository")
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
+
     UserEntity findByEmail(String email);
+
+    UserEntity findByEmailAndActive(String email, Boolean active);
 
     @Modifying
     @Query("update UserEntity ue set ue.fcmToken = :fcmToken, ue.deviceType = :deviceType where ue.email = :email")

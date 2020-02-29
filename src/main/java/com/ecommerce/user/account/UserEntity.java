@@ -23,6 +23,15 @@ public class UserEntity {
     private Date createDate;
     @Column(name = "update_date")
     private Date updateDate;
+    private Boolean active = true;
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
 
     public String getFcmToken() {
         return fcmToken;
