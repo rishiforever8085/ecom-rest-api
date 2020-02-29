@@ -59,7 +59,7 @@ public class JwtUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException("User not found with username: " + email);
         }
         List<UserAuthority> authorities = userAuthorityRepository.findByUserId(user.getId());
-        String role = authorities.size() >0 ? authorities.get(0).getAuthorityName() :"USER";
+        String role = authorities.size() > 0 ? authorities.get(0).getAuthorityName() : "USER";
         LoggedInUser loggedInUser = new LoggedInUser();
         loggedInUser.setEmail(user.getEmail());
         loggedInUser.setDeviceType(user.getDeviceType());

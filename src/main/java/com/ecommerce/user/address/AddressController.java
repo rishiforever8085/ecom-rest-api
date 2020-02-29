@@ -1,5 +1,7 @@
 package com.ecommerce.user.address;
 
+import com.ecommerce.ResponseWithStatus;
+import com.ecommerce.Status;
 import com.ecommerce.aspect.Track;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,21 +16,30 @@ public class AddressController {
 
     @Track
     @GetMapping("user/{userId}/address")
-    public List<AddressEntity> getAll(@PathVariable("userId") long userId) {
-        return addressService.getAllAddress(userId);
+    public ResponseEntity getAll(@PathVariable("userId") long userId) {
+        List<AddressEntity> out = addressService.getAllAddress(userId);
+        return ResponseEntity.ok(new ResponseWithStatus(
+                new Status(true, "Request completed successfully"), out)
+        );
     }
 
     @Track
     @GetMapping("/address/{addressId}")
-    public AddressEntity getOne(@PathVariable("userId") long userId, @PathVariable("addressId") long addressId) {
-        return addressService.getAddress(userId, addressId);
+    public ResponseEntity getOne(@PathVariable("userId") long userId, @PathVariable("addressId") long addressId) {
+        AddressEntity out = addressService.getAddress(userId, addressId);
+        return ResponseEntity.ok(new ResponseWithStatus(
+                new Status(true, "Request completed successfully"), out)
+        );
     }
 
     @Track
     @PostMapping("user/{userId}/address")
-    public AddressEntity updateOne(@PathVariable("userId") long userId,
-                                   @RequestBody AddressDTO addressDTO) {
-        return addressService.saveAddress(addressDTO, userId);
+    public ResponseEntity updateOne(@PathVariable("userId") long userId,
+                                    @RequestBody AddressDTO addressDTO) {
+        AddressEntity out = addressService.saveAddress(addressDTO, userId);
+        return ResponseEntity.ok(new ResponseWithStatus(
+                new Status(true, "Request completed successfully"), out)
+        );
     }
 
     @Track
@@ -36,6 +47,8 @@ public class AddressController {
     public ResponseEntity deleteOne(@PathVariable("userId") long userId,
                                     @RequestBody AddressDTO addressDTO) {
         addressService.deleteAddress(addressDTO, userId);
-        return ResponseEntity.ok("Request completed successfully");
+        return ResponseEntity.ok(new ResponseWithStatus(
+                new Status(true, "Request completed successfully"), null)
+        );
     }
 }

@@ -29,7 +29,7 @@ public class UserController {
     @PostMapping(value = "/deactivate")
     public ResponseEntity<?> deactivate(String email) {
         userDetailsService.deActivateUser(email);
-        return ResponseEntity.ok(new ResponseWithStatus(new Status(true,"Request completed successfully"), null));
+        return ResponseEntity.ok(new ResponseWithStatus(new Status(true, "Request completed successfully"), null));
     }
 
     @Track
@@ -55,6 +55,6 @@ public class UserController {
     public ResponseEntity<?> createRole(@RequestBody UserAuthorityRequest userAuthorityRequest) {
         //todo proper error handling.
         return ResponseEntity.ok(new ResponseWithStatus(new Status(true, "role assigned successfully")
-                ,userService.saveRole(userAuthorityRequest)));
+                , userService.saveRole(userAuthorityRequest)));
     }
 }

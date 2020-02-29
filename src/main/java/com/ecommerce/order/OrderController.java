@@ -1,8 +1,11 @@
 package com.ecommerce.order;
 
+import com.ecommerce.ResponseWithStatus;
+import com.ecommerce.Status;
 import com.ecommerce.aspect.Track;
 import com.ecommerce.service.EcommerceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Validator;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
@@ -25,22 +28,31 @@ public class OrderController {
 
     @Track
     @GetMapping
-    public List<Order> index() {
-        return ecommerceService.getOrders();
+    public ResponseEntity index() {
+        List<Order> out = ecommerceService.getOrders();
+        return ResponseEntity.ok(new ResponseWithStatus(
+                new Status(true, "Request completed successfully"), out)
+        );
     }
 
     @Track
     @GetMapping("/{id}")
-    public Order get(@PathVariable("id") long id) {
-        return ecommerceService.getOrder(id);
+    public ResponseEntity get(@PathVariable("id") long id) {
+        Order out = ecommerceService.getOrder(id);
+        return ResponseEntity.ok(new ResponseWithStatus(
+                new Status(true, "Request completed successfully"), out)
+        );
     }
 
     @Track
     @PostMapping
-    public Order create(@RequestBody @Valid Order order) {
+    public ResponseEntity create(@RequestBody @Valid Order order) {
         if (order.getItems() != null) {
             order.getItems().forEach(item -> item.setOrder(order));
         }
-        return ecommerceService.saveOrder(order);
+        Order out = ecommerceService.saveOrder(order);
+        return ResponseEntity.ok(new ResponseWithStatus(
+                new Status(true, "Request completed successfully"), out)
+        );
     }
 }

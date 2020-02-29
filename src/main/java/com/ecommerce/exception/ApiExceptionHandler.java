@@ -14,6 +14,7 @@ import static com.ecommerce.util.Constant.CORRELATION_ID;
 @ControllerAdvice
 public class ApiExceptionHandler {
     private static final Logger log = LoggerFactory.getLogger(ApiExceptionHandler.class);
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity handleException(Exception ex) {
         ex.printStackTrace();

@@ -1,8 +1,11 @@
 package com.ecommerce.cart;
 
+import com.ecommerce.ResponseWithStatus;
+import com.ecommerce.Status;
 import com.ecommerce.aspect.Track;
 import com.ecommerce.order.Order;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Validator;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
@@ -28,45 +31,60 @@ public class CartController {
 
     @Track
     @PostMapping("/")
-    public String create() {
-        return cartService.createNewCart();
+    public ResponseEntity<ResponseWithStatus> create() {
+        String out = cartService.createNewCart();
+        return ResponseEntity.ok(new ResponseWithStatus(
+                new Status(true, "Request completed successfully"), out)
+        );
     }
 
     @Track
     @PostMapping("/{id}")
-    public String addProduct(@PathVariable("id") String cartId, @RequestBody CartItem cartItem) {
+    public ResponseEntity addProduct(@PathVariable("id") String cartId, @RequestBody CartItem cartItem) {
         cartService.addProduct(cartId, cartItem);
-        return "OK";
+        return ResponseEntity.ok(new ResponseWithStatus(
+                new Status(true, "Request completed successfully"), null)
+        );
     }
 
     @Track
     @GetMapping("/{id}")
-    public Set<CartItem> getCartItems(@PathVariable("id") String cartId) {
-        return cartService.getItems(cartId);
+    public ResponseEntity getCartItems(@PathVariable("id") String cartId) {
+        Set<CartItem> out = cartService.getItems(cartId);
+        return ResponseEntity.ok(new ResponseWithStatus(
+                new Status(true, "Request completed successfully"), out)
+        );
     }
 
     @Track
     @DeleteMapping("{id}/{product_id}")
-    public String removeItem(@PathVariable("id") String cartId, @PathVariable("product_id") String productId) {
+    public ResponseEntity<ResponseWithStatus> removeItem(@PathVariable("id") String cartId, @PathVariable("product_id") String productId) {
         cartService.removeProduct(cartId, productId);
-        return "OK";
+        return ResponseEntity.ok(new ResponseWithStatus(
+                new Status(true, "Request completed successfully"), null)
+        );
     }
 
     @Track
     @PostMapping("{id}/quantity")
-    public String setProductQuantity(@PathVariable("id") String cartId, @RequestBody CartItem cartItem) {
+    public ResponseEntity<ResponseWithStatus> setProductQuantity(@PathVariable("id") String cartId, @RequestBody CartItem cartItem) {
         String productId = Long.toString(cartItem.getProductId());
         cartService.setProductQuantity(cartId, productId, cartItem.getQuantity());
-        return "OK";
+        return ResponseEntity.ok(new ResponseWithStatus(
+                new Status(true, "Request completed successfully"), null)
+        );
     }
 
     @Track
     @PostMapping("{id}/order")
-    public Order createOrder(@PathVariable("id") String cartId, @RequestBody @Valid Order order) {
+    public ResponseEntity<ResponseWithStatus> createOrder(@PathVariable("id") String cartId, @RequestBody @Valid Order order) {
         if (order == null) {
             System.out.println("Order not in POST");
             return null;
         }
-        return cartService.createOrder(cartId, order);
+        Order out = cartService.createOrder(cartId, order);
+        return ResponseEntity.ok(new ResponseWithStatus(
+                new Status(true, "Request completed successfully"), out)
+        );
     }
 }

@@ -5,7 +5,6 @@ import com.ecommerce.Status;
 import com.ecommerce.aspect.Track;
 import com.ecommerce.jwt.JwtRequest;
 import com.ecommerce.jwt.JwtTokenUtil;
-import com.ecommerce.user.account.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -43,7 +42,7 @@ public class JwtAuthenticationController {
 
         // In case user's fcmToken or deviceType is different than what we have in database, we need to update it
         if (authenticationRequest.getFcmToken() != loggedInUser.getFcmToken()
-            || authenticationRequest.getDeviceType() != loggedInUser.getFcmToken()) {
+                || authenticationRequest.getDeviceType() != loggedInUser.getFcmToken()) {
             userDetailsService.updateByEmail(authenticationRequest);
         }
 

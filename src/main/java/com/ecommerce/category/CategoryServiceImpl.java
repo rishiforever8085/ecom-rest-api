@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -42,18 +41,18 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<ProductCategoryEntity> getAllCategories() {
-        List<ProductCategoryEntity> categories =  productCategoryRepository.findAll();
-        categories.stream().forEach( category -> {
-            category.setImage(hostAddress+"/categories/image/"+ category.getId());
+        List<ProductCategoryEntity> categories = productCategoryRepository.findAll();
+        categories.stream().forEach(category -> {
+            category.setImage(hostAddress + "/categories/image/" + category.getId());
         });
         return categories;
     }
 
     @Override
     public List<ProductSubCategoryEntity> getAllSubCategories() {
-        List<ProductSubCategoryEntity> subCategories =  productSubCategoryRepository.findAll();
-        subCategories.forEach( subCategory -> {
-            subCategory.setImage(hostAddress+"/categories/subcategory/image/"+subCategory.getId());
+        List<ProductSubCategoryEntity> subCategories = productSubCategoryRepository.findAll();
+        subCategories.forEach(subCategory -> {
+            subCategory.setImage(hostAddress + "/categories/subcategory/image/" + subCategory.getId());
         });
         return subCategories;
     }
@@ -61,14 +60,14 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public ProductCategoryEntity getCategoryById(long categoryId) {
         ProductCategoryEntity category = productCategoryRepository.findById(categoryId).get();
-        category.setImage(hostAddress+"/categories/image/"+ category.getId());
+        category.setImage(hostAddress + "/categories/image/" + category.getId());
         return category;
     }
 
     @Override
     public ProductSubCategoryEntity getSubCategoryById(long subCategoryId) {
         ProductSubCategoryEntity entity = productSubCategoryRepository.findById(subCategoryId).get();
-        entity.setImage(hostAddress+"/categories/subcategory/image/"+entity.getId());
+        entity.setImage(hostAddress + "/categories/subcategory/image/" + entity.getId());
         return entity;
     }
 
@@ -230,8 +229,8 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void deleteCategory(long categoryId) {
-        try{
-        productCategoryRepository.deleteById(categoryId);
+        try {
+            productCategoryRepository.deleteById(categoryId);
         } catch (NoSuchElementException e) {
             throw new DatabaseException("CATEGORY_NOT_PRESENT_ERROR", "Given category id is not present in the system");
         }
@@ -239,7 +238,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     public void deleteSubCategory(long subCategoryId) {
-        try{
+        try {
             productSubCategoryRepository.deleteById(subCategoryId);
         } catch (NoSuchElementException e) {
             throw new DatabaseException("SUBCATEGORY_NOT_PRESENT_ERROR", "Given sub category id is not present in the system");

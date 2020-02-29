@@ -101,7 +101,7 @@ public class ProductService {
     public List<ProductImageEntity> getProductImages(long productId) {
         List<ProductImageEntity> images = productImageRepository.findByProductId(productId);
         images = images.stream().filter(image -> image.getProductId() == productId).collect(Collectors.toList());
-        images.forEach(image -> image.setLink(hostAddress+ "/product/image/" + image.getId()));
+        images.forEach(image -> image.setLink(hostAddress + "/product/image/" + image.getId()));
         return images;
     }
 

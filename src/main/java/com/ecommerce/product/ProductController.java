@@ -1,5 +1,7 @@
 package com.ecommerce.product;
 
+import com.ecommerce.ResponseWithStatus;
+import com.ecommerce.Status;
 import com.ecommerce.aspect.Track;
 import com.ecommerce.product.entity.Product;
 import com.ecommerce.product.entity.ProductImageEntity;
@@ -22,7 +24,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 
@@ -46,36 +47,47 @@ public class ProductController {
     @Track
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasAuthority('ADMIN')")
-    public Product createProduct(@RequestPart ProductRequest product,
-                                 @RequestPart(required = false) MultipartFile [] files) {
+    public ResponseEntity<ResponseWithStatus> createProduct(@RequestPart ProductRequest product,
+                                                            @RequestPart(required = false) MultipartFile[] files) {
 
         Product out = productService.saveProduct(product);
         handleFileUpload(out.getId(), files);
-        return out;
+        return ResponseEntity.ok(new ResponseWithStatus(
+                new Status(true, "Request completed successfully"), out)
+        );
     }
 
     @Track
     @GetMapping(value = "/{id}")
-    public Product get(@PathVariable("id") long id) {
-        return productService.getProduct(id);
+    public ResponseEntity<ResponseWithStatus> get(@PathVariable("id") long id) {
+        Product out = productService.getProduct(id);
+        return ResponseEntity.ok(new ResponseWithStatus(
+                new Status(true, "Request completed successfully"), out)
+        );
     }
 
     @Track
     @GetMapping
-    public List<ProductResponse> getAll() {
-        return productService.getAllProducts();
+    public ResponseEntity getAll() {
+        List<ProductResponse> out = productService.getAllProducts();
+        return ResponseEntity.ok(new ResponseWithStatus(
+                new Status(true, "Request completed successfully"), out)
+        );
     }
 
     @Track
     @PostMapping(value = "/{id}")
-    public Product edit(@PathVariable("id") long id, @RequestBody @Valid ProductRequest product) {
-        return productService.updateProduct(id, product);
+    public ResponseEntity edit(@PathVariable("id") long id, @RequestBody @Valid ProductRequest product) {
+        Product out = productService.updateProduct(id, product);
+        return ResponseEntity.ok(new ResponseWithStatus(
+                new Status(true, "Request completed successfully"), out)
+        );
     }
 
     @Track
     @PostMapping(value = "/{id}/uploadimage")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public List<ProductImageEntity> handleFileUpload(@PathVariable("id") Long id, @RequestParam("file") MultipartFile[] files) {
+    public ResponseEntity<ResponseWithStatus> handleFileUpload(@PathVariable("id") Long id, @RequestParam("file") MultipartFile[] files) {
         String path = PRODUCT_IMAGES_LOCATION + id;
         List<ProductImageEntity> outList = new ArrayList<>();
         for (int i = 0; i < files.length; i++) {
@@ -83,13 +95,18 @@ public class ProductController {
             ProductImageEntity imageEntity = productService.addProductImage(id, filename);
             outList.add(imageEntity);
         }
-        return outList;
+        return ResponseEntity.ok(new ResponseWithStatus(
+                new Status(true, "Request completed successfully"), outList)
+        );
     }
 
     @Track
     @GetMapping("/{id}/images")
-    public List<ProductImageEntity> viewImages(@PathVariable("id") String productId) {
-        return productService.getProductImages(Long.parseLong(productId));
+    public ResponseEntity viewImages(@PathVariable("id") String productId) {
+        List<ProductImageEntity> out = productService.getProductImages(Long.parseLong(productId));
+        return ResponseEntity.ok(new ResponseWithStatus(
+                new Status(true, "Request completed successfully"), out)
+        );
     }
 
     @Track

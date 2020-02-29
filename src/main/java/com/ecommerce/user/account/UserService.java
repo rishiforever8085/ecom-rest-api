@@ -43,7 +43,7 @@ public class UserService {
         userAuthority.setAuthorityName(authorityTypes.getName());
         try {
             userAuthority = userAuthorityRepository.save(userAuthority);
-        }catch (ConstraintViolationException e){
+        } catch (ConstraintViolationException e) {
             throw new DatabaseException("DB_ROLE_CREATION_FAILED", "User already has a role assigned - can not assign two roles at a time");
         }
         return userAuthority;

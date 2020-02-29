@@ -43,7 +43,7 @@ public class CategoryController {
         );
     }
 
-//    @GetMapping("/subcategories") // todo this API is probably not needed?
+    //    @GetMapping("/subcategories") // todo this API is probably not needed?
     public List<ProductSubCategoryEntity> allSubCategories() {
         List<ProductSubCategoryEntity> list = categoryServiceImpl.getAllSubCategories();
         return list;
@@ -61,7 +61,7 @@ public class CategoryController {
     @Track
     @GetMapping("subcategory/{subCategoryId}")
     public ResponseEntity getOneProductSubCategory(@PathVariable("subCategoryId") long subCategoryId) {
-        ProductSubCategoryEntity subCategory =  categoryServiceImpl.getSubCategoryById(subCategoryId);
+        ProductSubCategoryEntity subCategory = categoryServiceImpl.getSubCategoryById(subCategoryId);
         return ResponseEntity.ok(new ResponseWithStatus(
                 new Status(true, "Request completed successfully"), subCategory)
         );
@@ -81,7 +81,7 @@ public class CategoryController {
     public ResponseEntity<?> createSubCategory(
             SubCategoryRequest subCategoryRequest,
             @RequestParam(value = "file", required = false) MultipartFile file) {
-        ProductSubCategoryEntity out =  categoryServiceImpl.createSubCategory(subCategoryRequest, file);
+        ProductSubCategoryEntity out = categoryServiceImpl.createSubCategory(subCategoryRequest, file);
         return ResponseEntity.ok(new ResponseWithStatus(
                 new Status(true, "Request completed successfully"), out)
         );
@@ -90,10 +90,10 @@ public class CategoryController {
     @Track
     @PostMapping("/{categoryId}")
     public ResponseEntity updateCategory(@PathVariable(value = "categoryId") long categoryId,
-                                                CategoryRequest categoryRequest,
-                                                @RequestParam(value = "file", required = false) MultipartFile file) {
+                                         CategoryRequest categoryRequest,
+                                         @RequestParam(value = "file", required = false) MultipartFile file) {
 
-        ProductCategoryEntity out =  categoryServiceImpl.updateCategory(categoryId, categoryRequest, file);
+        ProductCategoryEntity out = categoryServiceImpl.updateCategory(categoryId, categoryRequest, file);
         return ResponseEntity.ok(new ResponseWithStatus(
                 new Status(true, "Request completed successfully"), out)
         );
@@ -102,9 +102,9 @@ public class CategoryController {
     @Track
     @PostMapping("/subcategory/{subCategoryId}")
     public ResponseEntity editSubCategory(@PathVariable(value = "subCategoryId") long subCategoryId,
-                                                    SubCategoryRequest subCategoryRequest,
-                                                    @RequestParam(value = "file", required = false) MultipartFile file) {
-        ProductSubCategoryEntity out =  categoryServiceImpl.updateSubCategory(subCategoryId, subCategoryRequest, file);
+                                          SubCategoryRequest subCategoryRequest,
+                                          @RequestParam(value = "file", required = false) MultipartFile file) {
+        ProductSubCategoryEntity out = categoryServiceImpl.updateSubCategory(subCategoryId, subCategoryRequest, file);
         return ResponseEntity.ok(new ResponseWithStatus(
                 new Status(true, "Request completed successfully"), out)
         );
