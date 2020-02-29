@@ -49,6 +49,7 @@ public class JwtUserDetailsService implements UserDetailsService {
         user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         user.setFcmToken(userDTO.getFcmToken());
         user.setDeviceType(userDTO.getDeviceType());
+        user.setActive(true);
         return userRepository.save(user);
     }
 
