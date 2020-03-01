@@ -15,6 +15,7 @@ import org.springframework.validation.Validator;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 
@@ -55,6 +56,15 @@ public class CategoryController {
         ProductCategoryEntity category = categoryServiceImpl.getCategoryById(categoryId);
         return ResponseEntity.ok(new ResponseWithStatus(
                 new Status(true, "Request completed successfully"), category)
+        );
+    }
+
+    @Track
+    @GetMapping("/{categoryId}/subcategories")
+    public ResponseEntity getSubCategories(@PathVariable("categoryId") long categoryId) {
+        List<ProductSubCategoryEntity> out = categoryServiceImpl.getSubCategoryByCategoryId(categoryId);
+        return ResponseEntity.ok(new ResponseWithStatus(
+                new Status(true, "Request completed successfully"), out)
         );
     }
 
@@ -110,6 +120,7 @@ public class CategoryController {
         );
     }
 
+    @ApiIgnore
     @Track
     @GetMapping("/image/{categoryId}")
     @ResponseBody
@@ -117,6 +128,7 @@ public class CategoryController {
         return categoryServiceImpl.getCategoryImage(categoryId);
     }
 
+    @ApiIgnore
     @Track
     @GetMapping("/subcategory/image/{subCategoryId}")
     @ResponseBody

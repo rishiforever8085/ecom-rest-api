@@ -228,6 +228,15 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    public List<ProductSubCategoryEntity> getSubCategoryByCategoryId(long categoryId) {
+        List<ProductSubCategoryEntity> entityList =  productCategoryRepository.findById(categoryId).get().getProductSubCategories();
+        entityList.forEach( entity -> {
+            entity.setImage(hostAddress + "/categories/subcategory/image/" + entity.getId());
+        });
+        return entityList;
+    }
+
+    @Override
     public void deleteCategory(long categoryId) {
         try {
             productCategoryRepository.deleteById(categoryId);

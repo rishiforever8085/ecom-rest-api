@@ -8,6 +8,9 @@ import com.ecommerce.product.entity.ProductImageEntity;
 import com.ecommerce.product.models.ProductRequest;
 import com.ecommerce.product.models.ProductResponse;
 import com.ecommerce.storage.StorageService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +23,7 @@ import org.springframework.validation.Validator;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 import java.io.IOException;
@@ -68,16 +72,25 @@ public class ProductController {
 
     @Track
     @GetMapping
-    public ResponseEntity getAll() {
-        List<ProductResponse> out = productService.getAllProducts();
+    public ResponseEntity getAll(@RequestParam(value = "subcategoryId", required = false) Long subcategoryId) {
+        List<ProductResponse> out = null;
+        if (subcategoryId != null){
+            out = getAllProductsBySubCategoryId(subcategoryId);
+        }else {
+            out = productService.getAllProducts();
+        }
         return ResponseEntity.ok(new ResponseWithStatus(
                 new Status(true, "Request completed successfully"), out)
         );
     }
 
+    public List<ProductResponse> getAllProductsBySubCategoryId(Long subcategoryId) {
+        return productService.getAllProductsBySubCategory(subcategoryId);
+    }
+
     @Track
     @PostMapping(value = "/{id}")
-    public ResponseEntity edit(@PathVariable("id") long id, @RequestBody @Valid ProductRequest product) {
+    public ResponseEntity updateProduct(@PathVariable("id") long id, @RequestBody @Valid ProductRequest product) {
         Product out = productService.updateProduct(id, product);
         return ResponseEntity.ok(new ResponseWithStatus(
                 new Status(true, "Request completed successfully"), out)
@@ -100,6 +113,7 @@ public class ProductController {
         );
     }
 
+    @ApiIgnore
     @Track
     @GetMapping("/{id}/images")
     public ResponseEntity viewImages(@PathVariable("id") String productId) {
@@ -109,6 +123,7 @@ public class ProductController {
         );
     }
 
+    @ApiIgnore
     @Track
     @GetMapping("/image/{id}")
     @ResponseBody

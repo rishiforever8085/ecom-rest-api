@@ -108,4 +108,8 @@ public class ProductService {
     public ProductImageEntity getImage(long imageId) {
         return productImageRepository.findById(imageId).get();
     }
+
+    public List<ProductResponse> getAllProductsBySubCategory(Long subcategoryId) {
+        return productRepository.findBySubCategoryId(subcategoryId);
+    }
 }

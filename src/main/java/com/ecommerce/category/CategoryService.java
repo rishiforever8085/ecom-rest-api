@@ -34,4 +34,6 @@ public interface CategoryService {
     void deleteSubCategory(long categoryId);
 
     ResponseEntity<Resource> getSubCategoryImage(long subCategoryId);
+
+    List<ProductSubCategoryEntity> getSubCategoryByCategoryId(long categoryId);
 }
