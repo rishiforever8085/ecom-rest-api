@@ -1,6 +1,10 @@
 package com.ecommerce.product.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "products")
@@ -8,6 +12,9 @@ public class Product {
 
     @Column(name = "product_code")
     protected String productCode;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "product_id")
     private long id;
     private String name;
     private String created;
@@ -23,15 +30,23 @@ public class Product {
     @Column(name = "additional_info")
     private String additionalInfo;
 
-    public Product() {
+    @OneToMany(
+            mappedBy = "product",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
+    )
+    @JsonManagedReference
+    private List<ProductImageEntity> productImages = new ArrayList<>();
+
+    public List<ProductImageEntity> getProductImages() {
+        return productImages;
     }
 
-    public Product(String id) {
-        this.id = Long.parseLong(id);
+    public void setProductImages(List<ProductImageEntity> productImages) {
+        this.productImages = productImages;
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public long getId() {
         return id;
     }

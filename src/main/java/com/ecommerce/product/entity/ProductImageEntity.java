@@ -1,17 +1,23 @@
 package com.ecommerce.product.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 
 @Entity
-@Table(name = "product_images")
+@Table(name = "product_images", catalog = "ecommerce", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "path")
+})
 public class ProductImageEntity {
-    private long id;
-    private long productId;
-    private String path;
-    private String link;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonBackReference
+    private Product product;
+    private String path;
+    private String image;
+
     public long getId() {
         return id;
     }
@@ -20,13 +26,12 @@ public class ProductImageEntity {
         this.id = id;
     }
 
-    @Column(name = "product_id")
-    public long getProductId() {
-        return productId;
+    public Product getProduct() {
+        return product;
     }
 
-    public void setProductId(long productId) {
-        this.productId = productId;
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
     @Column(name = "path")
@@ -38,11 +43,11 @@ public class ProductImageEntity {
         this.path = path;
     }
 
-    public String getLink() {
-        return link;
+    public String getImage() {
+        return image;
     }
 
-    public void setLink(String link) {
-        this.link = link;
+    public void setImage(String image) {
+        this.image = image;
     }
 }

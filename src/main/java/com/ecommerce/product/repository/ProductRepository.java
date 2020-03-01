@@ -11,5 +11,5 @@ import java.util.List;
 @Repository("productRepository")
 public interface ProductRepository extends JpaRepository<Product, Long>, PagingAndSortingRepository<Product, Long> {
 
-    List<ProductResponse> findBySubCategoryId(Long subcategoryId);
+    List<Product> findBySubCategoryId(Long subcategoryId);
 }

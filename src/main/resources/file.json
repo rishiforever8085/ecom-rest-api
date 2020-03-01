@@ -1,6 +1,12 @@
 {
-  "name": "Lux",
-  "price": "12.90",
-  "description": "Soap product",
-  "subCategoryId": 1
+  "additionalInfo": "string",
+  "description": "string",
+  "name": "string",
+  "offer": "100",
+  "offerPrice": "100",
+  "price": "100",
+  "productCode": "string",
+  "subCategoryId": 1,
+  "type": "string",
+  "unitOfMeasure": "string"
 }
